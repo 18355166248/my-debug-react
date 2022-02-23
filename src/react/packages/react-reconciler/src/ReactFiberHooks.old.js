@@ -404,6 +404,8 @@ export function renderWithHooks<Props, SecondArg>(
   // Non-stateful hooks (e.g. context) don't get added to memoizedState,
   // so memoizedState would be null during updates and mounts.
   if (__DEV__) {
+    console.log('current', current)
+    debugger
     if (current !== null && current.memoizedState !== null) {
       ReactCurrentDispatcher.current = HooksDispatcherOnUpdateInDEV;
     } else if (hookTypesDev !== null) {
@@ -754,7 +756,9 @@ function updateReducer<S, I, A>(
   initialArg: I,
   init?: I => S,
 ): [S, Dispatch<A>] {
+  debugger
   const hook = updateWorkInProgressHook();
+  console.log('hook', hook)
   const queue = hook.queue;
 
   if (queue === null) {
@@ -1498,11 +1502,14 @@ function mountState<S>(
   initialState: (() => S) | S,
 ): [S, Dispatch<BasicStateAction<S>>] {
   const hook = mountWorkInProgressHook();
+  console.log(hook)
+  debugger
   if (typeof initialState === 'function') {
     // $FlowFixMe: Flow doesn't like mixed types
     initialState = initialState();
   }
   hook.memoizedState = hook.baseState = initialState;
+  console.log(hook)
   const queue: UpdateQueue<S, BasicStateAction<S>> = {
     pending: null,
     interleaved: null,
@@ -1511,6 +1518,7 @@ function mountState<S>(
     lastRenderedReducer: basicStateReducer,
     lastRenderedState: (initialState: any),
   };
+  console.log(queue)
   hook.queue = queue;
   const dispatch: Dispatch<
     BasicStateAction<S>,
